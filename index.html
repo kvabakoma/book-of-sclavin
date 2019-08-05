@@ -20,15 +20,39 @@
             height: 100%;
             overflow: hidden;   
         }
+        #qr-snap {
+            position: fixed;
+            bottom: 0;
+            left:0;
+            width: 100%;
+            height:5em;
+            line-height: 5em;
+            color:white;
+            font-size: 1em;
+            background: red;
+            border-top:2px solid white;
+            z-index: 2;
+        }
+        #canvas-tmp {
+            width:640px; 
+            height:480px; 
+            position: absolute; 
+            top:0; 
+            right:0; 
+            border: 2px dotted white; 
+            z-index: 20; 
+        }
     </style>
     
 </head>
 
 <body>
+    <button id="qr-snap" onclick="scanQR()">snap</button>
     <a-scene logarythmic-renderer embedded arjs="debugUIEnabled: false; detectionMode: mono; patternRatio: 0.7;"
     vr-mode-ui="enabled: false"
     renderer="gammaOutput: true, gammaFactor: 2.2"
-    light="defaultLightsEnabled: false">
+    light="defaultLightsEnabled: false"
+    aframe-onload-event>
     <a-marker type='pattern' url='marker/pattern-qr-code-cokesummer-lar-li-07.patt'>
         <a-box></a-box>
     </a-marker>
@@ -37,7 +61,58 @@
     
     <a-entity camera></a-entity>
 </a-scene>
+
+<canvas id="canvas-tmp" width="640" height="480" ></canvas>
 <script>
+    var canvasTmp = document.getElementById("canvas-tmp");
+    var canvasTmpCtx = canvasTmp.getContext("2d");
+    var arjsVideo;
+    
+    function scanQR() {
+        console.log("scanning")
+        
+        canvasTmpCtx.drawImage(arjsVideo, 0, 0, canvasTmp.width, canvasTmp.height)
+        var imageData = canvasTmpCtx.getImageData(0, 0, 640, 480);
+        console.log(imageData.data)
+        var decoded = jsQR(imageData.data, 640, 480);
+        if (decoded) {
+            console.log(decoded.data)
+        } else {
+            alert('no code found')
+        }
+    }
+    
+    var mutationObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.addedNodes[0].id == 'arjs-video') {
+                console.log(mutation.addedNodes[0].id)
+                mutationObserver.disconnect();
+                arjsVideo = document.querySelector('video');
+                console.log(arjsVideo);
+            }
+        });
+    });
+    mutationObserver.observe(document.documentElement, {
+        attributes: false,
+        characterData: false,
+        childList: true,
+        subtree: true,
+        attributeOldValue: false,
+        characterDataOldValue: false
+    });
+    
+    window.onload = function () {
+        
+    }
+    
+    
+    // AFRAME COMPONENTS
+    AFRAME.registerComponent('aframe-onload-event', {
+        init: function () {
+            
+        }
+    });
+    
     AFRAME.registerComponent('logarythmic-renderer', {
         init: function () {
             this.el.renderer.capabilities.logarithmicDepthBuffer=true
