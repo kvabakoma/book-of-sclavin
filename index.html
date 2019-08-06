@@ -42,6 +42,13 @@
             border: 2px dotted white; 
             z-index: 20; 
         }
+        #info {
+            position: fixed;
+            top:0;
+            left:0;
+            background-color:white;
+            color: red;
+        }
     </style>
     
 </head>
@@ -52,7 +59,7 @@
     vr-mode-ui="enabled: false"
     renderer="gammaOutput: true, gammaFactor: 2.2"
     light="defaultLightsEnabled: false"
-    aframe-onload-event>
+    qr-manager>
     <a-marker type='pattern' url='marker/pattern-qr-code-cokesummer-lar-li-07.patt'>
         <a-box></a-box>
     </a-marker>
@@ -63,22 +70,26 @@
 </a-scene>
 
 <canvas id="canvas-tmp" width="640" height="480" ></canvas>
+<div id="info">info</div>
 <script>
     var canvasTmp = document.getElementById("canvas-tmp");
     var canvasTmpCtx = canvasTmp.getContext("2d");
     var arjsVideo;
+    var info = document.getElementById("info");
     
     function scanQR() {
-        console.log("scanning")
         
         canvasTmpCtx.drawImage(arjsVideo, 0, 0, canvasTmp.width, canvasTmp.height)
         var imageData = canvasTmpCtx.getImageData(0, 0, 640, 480);
-        console.log(imageData.data)
         var decoded = jsQR(imageData.data, 640, 480);
         if (decoded) {
             console.log(decoded.data)
+            info.innerHTML = decoded.data;
         } else {
-            alert('no code found')
+            info.innerHTML = 'no code found';
+            setTimeout(function() {
+                scanQR();
+            },100);
         }
     }
     
@@ -107,7 +118,7 @@
     
     
     // AFRAME COMPONENTS
-    AFRAME.registerComponent('aframe-onload-event', {
+    AFRAME.registerComponent('qr-manager', {
         init: function () {
             
         }
