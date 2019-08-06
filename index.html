@@ -11,46 +11,27 @@
     <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
     <script src="src/aframe-extras.min.js"></script>
     <script src="src/jsQR.js"></script>
+    <link rel="stylesheet" href="css/style.css">
     
-    <style>
-        body, html {
-            padding: 0;
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;   
-        }
-        #qr-snap {
-            position: fixed;
-            bottom: 0;
-            left:0;
-            width: 100%;
-            height:5em;
-            line-height: 5em;
-            color:white;
-            font-size: 1em;
-            background: red;
-            border-top:2px solid white;
-            z-index: 2;
-        }
-        #canvas-tmp {
-            width:640px; 
-            height:480px; 
-            position: absolute; 
-            top:0; 
-            right:0; 
-            border: 2px dotted white; 
-            z-index: 20; 
-        }
-        #info {
-            position: fixed;
-            top:0;
-            left:0;
-            background-color:white;
-            color: red;
-        }
-    </style>
-    
+    <script>
+        AFRAME.registerComponent('qr-manager', {
+            init: function () {
+                this.el.sceneEl.addEventListener('markerFound', function () {
+                    markerVisibilityFlag = true;
+                    console.log("marker found");
+                });
+                this.el.sceneEl.addEventListener('markerLost', function () {
+                    document.querySelector("a-marker").object3D.visible = true;
+                    markerVisibilityFlag = false;
+                    setTimeout(function () {
+                        if (markerVisibilityFlag == false) document.querySelector("a-marker").object3D.visible = false;
+                        if (markerVisibilityFlag == true) document.querySelector("a-marker").object3D.visible = true;
+                    }, 1500)
+                    
+                });
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -59,8 +40,9 @@
     vr-mode-ui="enabled: false"
     renderer="gammaOutput: true, gammaFactor: 2.2"
     light="defaultLightsEnabled: false"
-    qr-manager>
+    stats>
     <a-marker type='pattern' url='marker/pattern-qr-code-cokesummer-lar-li-07.patt'>
+        <a-entity id="qr-manager" qr-manager></a-entity>
         <a-box></a-box>
     </a-marker>
     
@@ -72,19 +54,21 @@
 <canvas id="canvas-tmp" width="640" height="480" ></canvas>
 <div id="info">info</div>
 <script>
+    var qrContent = '';
+    var markerVisibilityFlag = false;
     var canvasTmp = document.getElementById("canvas-tmp");
     var canvasTmpCtx = canvasTmp.getContext("2d");
     var arjsVideo;
     var info = document.getElementById("info");
     
-    function scanQR() {
-        
+    function scanQR() {        
         canvasTmpCtx.drawImage(arjsVideo, 0, 0, canvasTmp.width, canvasTmp.height)
-        var imageData = canvasTmpCtx.getImageData(0, 0, 640, 480);
-        var decoded = jsQR(imageData.data, 640, 480);
+        //var imageData = canvasTmpCtx.getImageData(0, 0, 640, 480);
+        var decoded = jsQR(canvasTmpCtx.getImageData(0, 0, 640, 480).data, 640, 480);
         if (decoded) {
             console.log(decoded.data)
             info.innerHTML = decoded.data;
+            qrContent = decoded.data;
         } else {
             info.innerHTML = 'no code found';
             setTimeout(function() {
@@ -93,13 +77,15 @@
         }
     }
     
+
+    // DETECT WHEN VIDEO IS INSERTED AND SET IT TO A VARIABLE
     var mutationObserver = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.addedNodes[0].id == 'arjs-video') {
-                console.log(mutation.addedNodes[0].id)
+                // console.log(mutation.addedNodes[0].id)
                 mutationObserver.disconnect();
                 arjsVideo = document.querySelector('video');
-                console.log(arjsVideo);
+                // console.log(arjsVideo);
             }
         });
     });
@@ -112,18 +98,8 @@
         characterDataOldValue: false
     });
     
-    window.onload = function () {
-        
-    }
     
-    
-    // AFRAME COMPONENTS
-    AFRAME.registerComponent('qr-manager', {
-        init: function () {
-            
-        }
-    });
-    
+    // AFRAME COMPONENTS    
     AFRAME.registerComponent('logarythmic-renderer', {
         init: function () {
             this.el.renderer.capabilities.logarithmicDepthBuffer=true
