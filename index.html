@@ -36,7 +36,7 @@
                         if (markerVisibilityFlag == false) {
                             document.querySelector("a-marker").object3D.visible = false;
                             info.innerHTML = 'marker lost';  
-                            loaderRef.setAttribute('visible', true);
+                            // loaderRef.setAttribute('visible', true);
                             currentGifRef.setAttribute('visible', false);                          
                         }
                         if (markerVisibilityFlag == true) document.querySelector("a-marker").object3D.visible = true;
@@ -58,7 +58,7 @@
     >
     <a-marker type='pattern' url='marker/pattern-qr-code-cokesummer-lar-li-07.patt'>
         <a-entity id="qr-manager" qr-manager></a-entity>
-        <a-plane id="loader" position="0 0 0" rotation="-90 0 0" width="1.2" height="1.2" material="shader:gif;src:url(assets/images/loader.gif);"></a-plane>
+        <a-plane id="loader" position="0 0 0" rotation="-90 0 0" width="1.2" height="1.2" material="shader:gif;src:url(assets/images/loader.gif);" visible="false"></a-plane>
         <a-plane id="current-gif" position="0 0 0" rotation="-90 0 0" width="1.2" height="1.2" material="shader:gif;src:url(assets/images/1.gif);" visible="false"></a-plane>
     </a-marker>
     
