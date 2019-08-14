@@ -25,7 +25,7 @@
                 
                 this.el.sceneEl.addEventListener('markerFound', function () {
                     if (!markerVisibilityFlag) scanQR();
-                    markerVisibilityFlag = true;
+                    markerVisibilityFlag = true;                    
                 });
                 
                 this.el.sceneEl.addEventListener('markerLost', function () {
@@ -37,7 +37,8 @@
                             document.querySelector("a-marker").object3D.visible = false;
                             info.innerHTML = 'marker lost';  
                             // loaderRef.setAttribute('visible', true);
-                            currentGifRef.setAttribute('visible', false);                          
+                            currentGifRef.setAttribute('visible', false);    
+                            overlay.classList.remove("d-none");                      
                         }
                         if (markerVisibilityFlag == true) document.querySelector("a-marker").object3D.visible = true;
                     }, 500)
@@ -83,6 +84,7 @@
     var canvasTmp = document.getElementById("canvas-tmp");
     var canvasTmpCtx = canvasTmp.getContext("2d");
     var arjsVideo;
+    var overlay = document.getElementById('overlay');
     var info = document.getElementById("info");
     var loaderRef, currentGifRef;
     
@@ -100,13 +102,14 @@
             // EXTRACT GIF ID FROM qrContent and use ut for material src
             currentGifRef.setAttribute('material', 'src', 'url(assets/images/'+getRandomInt(1,4)+'.gif)');
             console.log("changed material")
-            loaderRef.setAttribute('visible', false);
+            // loaderRef.setAttribute('visible', false);
             currentGifRef.setAttribute('visible', true);
+            overlay.classList.add("d-none");
         } else {
             info.innerHTML = 'no code found';
             setTimeout(function() {
                 console.log('delayed call')
-                scanQR();
+                if (markerVisibilityFlag) scanQR();
             },100);
         }
     }
