@@ -1,0 +1,36 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    
+    <title>Book of Sclavin: AR</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="AR web app for Book of Sclavin interactive book">
+    <meta name="author" content="kvaba.com">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.4.3/mobile-detect.min.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">    
+    
+    <script>
+        var md = new MobileDetect(window.navigator.userAgent);
+        if( !md.mobile() ) {
+            console.log("desktop")
+        } else {
+            if ( md.is('iPhone') || md.is('iPad')) {
+                if (md.userAgent() == "Safari" ) {
+                    window.location.href="/index.html";
+                }
+            } else {
+                if (md.userAgent() == "Chrome" ) {
+                    window.location.href="/index.html";
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+    error
+    
+</body>
+</html>

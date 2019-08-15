@@ -13,15 +13,14 @@
     <script src="src/aframe-gif-shader.min.js"></script>
     <script src="src/aframe-extras.min.js"></script>
     <script src="src/jsQR.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.4.3/mobile-detect.min.js"></script>
     <link rel="stylesheet" href="assets/css/style.css">
     
     <script>
         AFRAME.registerComponent('qr-manager', {
             init: function () {
                 
-                loaderRef = document.getElementById('loader');
-                currentGifRef = document.getElementById('current-gif');
-                // console.log(loaderRef,currentGifRef)
+                gifRef = document.getElementById('current-gif');
                 
                 this.el.sceneEl.addEventListener('markerFound', function () {
                     if (!markerVisibilityFlag) scanQR();
@@ -36,9 +35,9 @@
                         if (markerVisibilityFlag == false) {
                             document.querySelector("a-marker").object3D.visible = false;
                             info.innerHTML = 'marker lost';  
-                            // loaderRef.setAttribute('visible', true);
-                            currentGifRef.setAttribute('visible', false);    
-                            overlay.classList.remove("d-none");                      
+                            gifRef.setAttribute('visible', false);    
+                            overlay.classList.remove("d-none");   
+                            gifRef.setAttribute('material', 'src', 'url()');                   
                         }
                         if (markerVisibilityFlag == true) document.querySelector("a-marker").object3D.visible = true;
                     }, 500)
@@ -47,6 +46,24 @@
                 
             }
         });
+    </script>
+    
+    <script>
+        var md = new MobileDetect(window.navigator.userAgent);
+        if (!md.mobile()) {
+            console.log("desktop")
+            window.location.href = "error.html?err=desktop";
+        } else {
+            if (md.is('iPhone') || md.is('iPad')) {
+                if (md.userAgent() != "Safari") {
+                    window.location.href = "error.html?err=ios";
+                }
+            } else {
+                if (md.userAgent() != "Chrome") {
+                    window.location.href = "error.html?err=android";
+                }
+            }
+        }
     </script>
 </head>
 
@@ -59,7 +76,6 @@
     >
     <a-marker type='pattern' url='marker/pattern-qr-code-cokesummer-lar-li-07.patt'>
         <a-entity id="qr-manager" qr-manager></a-entity>
-        <a-plane id="loader" position="0 0 0" rotation="-90 0 0" width="1.2" height="1.2" material="shader:gif;src:url(assets/images/loader.gif);" visible="false"></a-plane>
         <a-plane id="current-gif" position="0 0 0" rotation="-90 0 0" width="1.2" height="1.2" material="shader:gif;src:url(assets/images/1.gif);" visible="false"></a-plane>
     </a-marker>
     
@@ -77,6 +93,7 @@
 
 <canvas id="canvas-tmp" width="640" height="480" ></canvas>
 <div id="info">info</div>
+
 <script>
     var qrContent = '';
     var markerVisibilityFlag = false;
@@ -86,7 +103,7 @@
     var arjsVideo;
     var overlay = document.getElementById('overlay');
     var info = document.getElementById("info");
-    var loaderRef, currentGifRef;
+    var gifRef;
     
     function scanQR() {   
         if (qrVisibilityFlag) return // don't read QR if the AR is not located
@@ -99,11 +116,8 @@
             info.innerHTML = decoded.data;
             qrContent = decoded.data;
             qrVisibilityFlag = true;
-            // EXTRACT GIF ID FROM qrContent and use ut for material src
-            currentGifRef.setAttribute('material', 'src', 'url(assets/images/'+getRandomInt(1,4)+'.gif)');
-            console.log("changed material")
-            // loaderRef.setAttribute('visible', false);
-            currentGifRef.setAttribute('visible', true);
+            gifRef.setAttribute('material', 'src', 'url(assets/images/'+qrContent.split("/").pop()+'.gif)');
+            gifRef.setAttribute('visible', true);
             overlay.classList.add("d-none");
         } else {
             info.innerHTML = 'no code found';
