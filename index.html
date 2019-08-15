@@ -69,13 +69,14 @@
 
 <body>
     <button id="qr-snap" onclick="scanQR()">snap</button>
-    <a-scene logarythmic-renderer embedded arjs="debugUIEnabled: false; detectionMode: mono; patternRatio: 0.7;"
+    <a-scene embedded arjs="debugUIEnabled: false; detectionMode: mono; patternRatio: 0.7;"
     vr-mode-ui="enabled: false"
     renderer="gammaOutput: true, gammaFactor: 2.2"
     light="defaultLightsEnabled: false"
     >
     <a-marker type='pattern' url='marker/pattern-qr-code-cokesummer-lar-li-07.patt'>
         <a-entity id="qr-manager" qr-manager></a-entity>
+        <a-plane id="loader" position="0 -.1 0" rotation="-90 0 0" width=".2" height=".2" material="shader:gif;src:url(assets/images/loader.gif);"></a-plane>
         <a-plane id="current-gif" position="0 0 0" rotation="-90 0 0" width="1.2" height="1.2" material="shader:gif;src:url(assets/images/1.gif);" visible="false"></a-plane>
     </a-marker>
     
@@ -126,8 +127,7 @@
                 if (markerVisibilityFlag) scanQR();
             },100);
         }
-    }
-    
+    }    
     
     // DETECT WHEN VIDEO IS INSERTED AND SET IT TO A VARIABLE
     var mutationObserver = new MutationObserver(function(mutations) {
@@ -147,13 +147,6 @@
         attributeOldValue: false,
         characterDataOldValue: false
     });
-    
-    /*AFRAME.registerComponent('logarythmic-renderer', {
-        init: function () {
-            this.el.renderer.capabilities.logarithmicDepthBuffer=true
-            // console.log('Renderer ' ,this.el.renderer);
-        }
-    });*/
     
     function getRandomInt(min, max) {
         min = Math.ceil(min);

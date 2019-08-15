@@ -26,11 +26,42 @@
                 }
             }
         }
+        
+        // if () {}
     </script>
 </head>
 
 <body>
-    error
-    
+    <div id="ios"></div>
+    <div id="android"></div>
+    <div id="desktop"></div>
+    <script>
+        (function () {
+            console.log("hi")
+            var err = getParameterByName("err");
+            if (err=="desktop"){
+                document.getElementById("err-msg").innerHTML = "Моля, отворете страницата на мобилно устройство";
+                document.getElementById("logo").style.width = "250px";
+            } else if (err=="ios") {
+                document.getElementById("err-msg").innerHTML = "Моля, отворете страницата с iOS Safari";
+            } else if (err=="android") {
+                document.getElementById("err-msg").innerHTML = "Моля, отворете страницата с Google Chrome";
+            } else {
+                
+            }
+        }());
+        
+        function getParameterByName( name ){
+            var regexS = "[\\?&]"+name+"=([^&#]*)",
+            regex = new RegExp( regexS ),
+            results = regex.exec( window.location.search );
+            if( results == null ){
+                return "";
+            } else{
+                // return decodeURIComponent(results[1].replace(/\+/g, " "));
+                return results[1].replace(/\+/g, " ");
+            }
+        }
+    </script>
 </body>
 </html>
