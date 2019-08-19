@@ -14,15 +14,16 @@
     <script src="src/aframe-extras.min.js"></script>
     <script src="src/jsQR.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.4.3/mobile-detect.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     
     <script>
+        var loadedGifs = [];
         AFRAME.registerComponent('qr-manager', {
             init: function () {
                 
-                //gifRef = document.getElementById('current-gif');
                 loadedGifs = [document.getElementById('gif0'),document.getElementById('gif1'),document.getElementById('gif2')]
-                //console.log(document.getElementById("gif1").getAttribute('material').split("#").pop().split(".").shift())
+                console.log(loadedGifs)
                 
                 this.el.sceneEl.addEventListener('markerFound', function () {
                     if (!markerVisibilityFlag) scanQR();
@@ -40,8 +41,7 @@
                             for(i=0;i<loadedGifs.length;i++){
                                 loadedGifs[i].setAttribute('visible', false);  
                             }
-                            overlay.classList.remove("d-none");   
-                            //gifRef.setAttribute('material', 'src', 'url()');                   
+                            overlay.classList.remove("d-none");                    
                         }
                         if (markerVisibilityFlag == true) document.querySelector("a-marker").object3D.visible = true;
                     }, 300)
@@ -79,47 +79,8 @@
     light="defaultLightsEnabled: false"
     >
     
-    <a-assets>
-        <a-asset-item id="1" src="assets/images/1.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="2" src="assets/images/2.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="3" src="assets/images/3.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="4" src="assets/images/4.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="5" src="assets/images/5.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="6" src="assets/images/6.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="7" src="assets/images/7.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="8" src="assets/images/8.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="9" src="assets/images/9.gif" crossOrigin="anonymous"></a-asset-item>
-        <!-- <a-asset-item id="10" src="assets/images/10.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="11" src="assets/images/11.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="12" src="assets/images/12.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="13" src="assets/images/13.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="14" src="assets/images/14.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="15" src="assets/images/15.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="16" src="assets/images/16.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="17" src="assets/images/17.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="18" src="assets/images/18.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="19" src="assets/images/19.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="20" src="assets/images/20.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="21" src="assets/images/21.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="22" src="assets/images/22.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="23" src="assets/images/23.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="24" src="assets/images/24.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="25" src="assets/images/25.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="26" src="assets/images/26.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="27" src="assets/images/27.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="28" src="assets/images/28.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="29" src="assets/images/29.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="30" src="assets/images/30.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="31" src="assets/images/31.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="32" src="assets/images/32.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="33" src="assets/images/33.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="34" src="assets/images/34.gif" crossOrigin="anonymous"></a-asset-item>
-        <a-asset-item id="35" src="assets/images/35.gif" crossOrigin="anonymous"></a-asset-item> -->
-    </a-assets>
-    
     <a-marker type='pattern' url='marker/pattern-qr-code-cokesummer-lar-li-07.patt'>
         <a-entity id="qr-manager" qr-manager></a-entity>
-        <!-- <a-plane id="loader" position="0 .1 0" rotation="-90 0 0" width="1.2" height="1.2" material="shader:gif;src:url(assets/images/LOADER.gif);"></a-plane> -->
         <a-plane id="gif0" gifId="1" position="0 0 0" rotation="-90 0 0" width="1.2" height="1.2" material="shader:gif;src:url(assets/images/1.gif);" visible="false"></a-plane>
         <a-plane id="gif1" gifId="2" position="0 0 0" rotation="-90 0 0" width="1.2" height="1.2" material="shader:gif;src:url(assets/images/2.gif);" visible="false"></a-plane>
         <a-plane id="gif2" gifId="3" position="0 0 0" rotation="-90 0 0" width="1.2" height="1.2" material="shader:gif;src:url(assets/images/3.gif);" visible="false"></a-plane>
@@ -148,10 +109,10 @@
     var canvasTmpCtx = canvasTmp.getContext("2d");
     var arjsVideo;
     var overlay = document.getElementById('overlay');
-    var info = document.getElementById("info");
-    var loadedGifs = [];
+    var info = document.getElementById("info");    
     
     function scanQR() {   
+
         if (qrVisibilityFlag) return // don't read QR if the AR is not located
         console.log("scanning for QR")
         
@@ -170,8 +131,8 @@
                 showGif(isLoaded);
                 reloadGifs(qrContent,isLoaded);
             } else {                                // 2. if not exists -> load and show()
-                console.log("in does not exist");
-                loadedGifs[1].setAttribute('material', 'src', ''); 
+                console.log("in does not exist",loadedGifs);
+                loadedGifs[1].setAttribute('material', 'src', 'url()'); 
                 loadedGifs[1].setAttribute('material', 'src', 'url(assets/images/LOADER.gif)'); 
                 loadedGifs[1].setAttribute('material', 'src', 'url(assets/images/'+qrContent+'.gif)'); 
                 loadedGifs[1].setAttribute('gifId', qrContent);

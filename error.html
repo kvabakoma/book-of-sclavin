@@ -9,6 +9,7 @@
     <meta name="description" content="AR web app for Book of Sclavin interactive book">
     <meta name="author" content="kvaba.com">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.4.3/mobile-detect.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">    
     
     <script>
@@ -26,30 +27,26 @@
                 }
             }
         }
-        
-        // if () {}
     </script>
 </head>
 
 <body>
-    <div id="ios"></div>
-    <div id="android"></div>
-    <div id="desktop"></div>
+    <div id="err-msg"></div>
     <script>
-        (function () {
-            console.log("hi")
+        console.log("asda")
+        window.onload = function() {
             var err = getParameterByName("err");
+            console.log("hi", err)
             if (err=="desktop"){
-                document.getElementById("err-msg").innerHTML = "Моля, отворете страницата на мобилно устройство";
-                document.getElementById("logo").style.width = "250px";
+                document.getElementById("err-msg").innerHTML = "THIS BROWSER<br />IS NOT SUPPORTED<br />PLEASE OPEN THE WEBSITE<br />WITH YOUR MOBILE DEVICE.";
             } else if (err=="ios") {
-                document.getElementById("err-msg").innerHTML = "Моля, отворете страницата с iOS Safari";
+                document.getElementById("err-msg").innerHTML = "THIS BROWSER<br />IS NOT SUPPORTED ON iOS<br />PLEASE OPEN THE WEBSITE<br />WITH SAFARI.";
             } else if (err=="android") {
-                document.getElementById("err-msg").innerHTML = "Моля, отворете страницата с Google Chrome";
+                document.getElementById("err-msg").innerHTML = "THIS BROWSER<br />IS NOT SUPPORTED ON ANDROID OS<br />PLEASE OPEN THE WEBSITE<br />WITH GOOGLE CHROME.";
             } else {
                 
             }
-        }());
+        }
         
         function getParameterByName( name ){
             var regexS = "[\\?&]"+name+"=([^&#]*)",
