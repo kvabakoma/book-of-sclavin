@@ -132,8 +132,9 @@
                 reloadGifs(qrContent,isLoaded);
             } else {                                // 2. if not exists -> load and show()
                 console.log("in does not exist",loadedGifs);
-                loadedGifs[1].setAttribute('material', 'src', 'url()'); 
+                loadedGifs[1].setAttribute('material', 'src', ''); 
                 loadedGifs[1].setAttribute('material', 'src', 'url(assets/images/LOADER.gif)'); 
+                loadedGifs[1].setAttribute('material', 'src', ''); 
                 loadedGifs[1].setAttribute('material', 'src', 'url(assets/images/'+qrContent+'.gif)'); 
                 loadedGifs[1].setAttribute('gifId', qrContent);
                 reloadGifs(qrContent,1);
